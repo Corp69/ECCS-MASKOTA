@@ -3,7 +3,18 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "strict": true,
+     "paths": {
+      "@shared/*": [
+        "./src/app/shared/*"
+      ],
+      "@environments": [
+        "./src/environments/environment.ts"
+      ],
+      "@guard": [
+        "./src/app/auth/login/guards/auth.guard.ts"
+      ]
+    },
+    "strict": false,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,

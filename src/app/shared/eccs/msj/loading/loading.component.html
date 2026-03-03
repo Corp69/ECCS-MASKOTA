@@ -1,0 +1,56 @@
+<div class="loading-container">
+  <div class="spinner"></div>
+  <h3 class="system-name">ECCS</h3>
+  <p class="loading-text">El sistema se está cargando...</p>
+</div>
+
+<style>
+.loading-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e293b 0%, #374151 50%, #3b82f6 100%);
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+  box-shadow: 0 1px 3px 0 rgba(59, 130, 246, 0.2), 0 1px 2px 0 rgba(59, 130, 246, 0.1);
+  padding: 1.5rem;
+  z-index: 9999;
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(248, 250, 252, 0.3);
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.system-name {
+  margin-top: 0.8rem;
+  color: #f8fafc;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.loading-text {
+  margin-top: 0.3rem;
+  color: #f8fafc;
+  font-size: 12px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
