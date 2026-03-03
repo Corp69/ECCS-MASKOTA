@@ -1,10 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { NgStyle } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import ImportsModule from '@shared/primeng/ImportsModule';
 import { EcssMsjLoadingComponent } from '@shared/eccs/msj/loading/loading.component';
 
 @Component({
   imports: [
+    NgStyle,
     //prime NG
     ImportsModule, 
     //ECCS - MSJ - CARGA 
