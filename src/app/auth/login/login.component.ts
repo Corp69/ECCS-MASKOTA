@@ -63,9 +63,22 @@ export default class LoginComponent implements OnInit {
   }
 
   //--=============================================================================================================
+  //?-- MASKOTA - LOGIN TEST - Login temporal mientras se desarrolla el backend
+  public loginTest(): void {
+    if (this.formLogin.value.usuario === 'admin' && this.formLogin.value.pass === '1234') {
+      this.router.navigate(['/maskota/principal']);
+    } else {
+      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Maskota', detail: 'Credenciales inválidas. Usa admin / 1234' });
+    }
+  }
+
+  //--=============================================================================================================
   //?-- ARIES ERP - LOGIN - Validación inicial de credenciales
   // Valida las credenciales del usuario contra el servicio ECCS
   public onSave(): void {
+    this.loginTest();
+    return;
+
     this.Ariesblocked.set(true);
 
     this.servicio.LoginECCS(this.formLogin.value)

@@ -80,6 +80,12 @@ export class LoginService {
 
   //--=============================================================================================================
   //?-- ARIES ERP - AUTH - logeo en eccs y validacion de licencia
+  public LoginTest(modelo: MdlUser): Observable<{ Response: any; Success: boolean; Mensaje: string, token: string }> {
+    // Limpiamos el local storage para evitar conflictos con otros tokens o datos almacenados
+    this.StorageService.ClearLocalStorage();
+    return this.errores.handleRequest(`${environment.baseUrl}auth/empresas/login`, modelo);
+  }
+ 
   public LoginECCS(modelo: MdlUser): Observable<{ Response: any; Success: boolean; Mensaje: string, token: string }> {
     // Limpiamos el local storage para evitar conflictos con otros tokens o datos almacenados
     this.StorageService.ClearLocalStorage();
