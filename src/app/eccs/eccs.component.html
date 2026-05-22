@@ -1,6 +1,27 @@
 <!-- eccs - msj - carga  -->
 @if(Eccsblocked()) { <eccs-msj-loading /> }
-<!-- aqui generamos un left bottom y rigth y top  -->
+
+<!-- NAVBAR -->
+<div style="background: linear-gradient(135deg, #1e293b, #0f172a); padding: 1rem 2rem;">
+  <div class="flex align-items-center justify-content-between">
+
+    <!-- Marca -->
+    <div class="flex align-items-center gap-2">
+      <i class="pi pi-heart-fill" style="color: #f97316; font-size: 1.4rem;"></i>
+      <span class="font-bold text-white" style="font-size: 1.2rem;">+kota</span>
+      <span style="color: #64748b;">|</span>
+      <span style="color: #94a3b8; font-size: 0.85rem;">Gestión de Maskotas</span>
+    </div>
+
+    <!-- Acciones -->
+    <div class="flex align-items-center gap-2">
+      <p-tag value="Admin" severity="warn" icon="pi pi-user" />
+    </div>
+
+  </div>
+</div>
+
+<!-- contenido -->
 <div style="margin: 20px 20px 20px 20px;">
     <router-outlet />
 </div>

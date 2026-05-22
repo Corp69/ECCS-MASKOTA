@@ -1,0 +1,75 @@
+@keyframes headerEntrada {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.header-entrada {
+  animation: headerEntrada 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Stats cards */
+.stat-card {
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  cursor: default;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  opacity: 0.15;
+  background: white;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+.stat-card-orange { background: linear-gradient(135deg, #c2410c, #fb923c); }
+.stat-card-green  { background: linear-gradient(135deg, #15803d, #4ade80); }
+.stat-card-blue   { background: linear-gradient(135deg, #1d4ed8, #60a5fa); }
+
+.stat-icon-wrap {
+  margin-bottom: 0.75rem;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.stat-icon {
+  font-size: 2.5rem !important;
+  color: rgba(255,255,255,0.9);
+}
+
+.stat-numero {
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+  animation: countUp 0.6s ease-out both;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

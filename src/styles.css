@@ -2,6 +2,68 @@
 
 @import "tailwindcss";
 
+body {
+  background-color: #cbd5e1;
+}
+
+.p-divider .p-divider-content,
+.p-divider::before {
+  border-color: #1e293b !important;
+  border-width: 1.5px !important;
+}
+
+/* ============================================================================================================ */
+/* ECCS - Cards (rh-card) */
+/* ============================================================================================================ */
+
+.rh-card {
+  overflow:    hidden;
+  cursor:      pointer;
+  will-change: transform;
+  transition:  transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.rh-card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15) !important;
+}
+
+.rh-banner {
+  height:          140px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  transition:      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.rh-card:hover .rh-banner {
+  transform: scale(1.04);
+}
+
+.rh-icon-wrap {
+  width:           7rem;
+  height:          7rem;
+  border-radius:   50%;
+  background:      rgba(255, 255, 255, 0.2);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  transition:      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.rh-card:hover .rh-icon-wrap {
+  transform: scale(1.15) rotate(-4deg);
+}
+
+.rh-icon {
+  font-size: 3.5rem !important;
+  color:     #fff;
+  line-height: 1;
+}
+
+.rh-icon::before {
+  font-size: 3.5rem !important;
+}
+
 /* ============================================================================================================ */
 /* ECCS - Animaciones */
 /* ============================================================================================================ */

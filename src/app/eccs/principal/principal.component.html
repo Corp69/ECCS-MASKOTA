@@ -5,155 +5,195 @@
 <!-- eccs - msj - carga  -->
 @if(Eccsblocked()) { <eccs-msj-loading /> }
 
-<!-- Hero Section +kota -->
-<div class="fade-in"
-  style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); padding: 2rem 1rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;">
-  <div style="display: flex; align-items: center; justify-content: center; gap: 1rem;">
-    <i class="pi pi-heart-fill" style="font-size: 3rem; color: white;"></i>
-    <div style="text-align: left;">
-      <h1 style="font-size: 2.5rem; font-weight: bold; margin: 0; color: white;">+kota</h1>
-      <h2 style="font-size: 1.5rem; margin: 0; color: rgba(255,255,255,0.9);">Registro de Mascotas</h2>
+
+<!-- ============================================================================================================ -->
+<div class="p-4">
+
+  <!-- HEADER -->
+  <div class="header-entrada flex align-items-center justify-content-between mb-3">
+    <div class="fade-in flex align-items-center gap-3">
+      <p-avatar label="🐾" size="xlarge" shape="circle"
+        style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; font-size: 1.8rem;" />
+      <div>
+        <div class="text-3xl font-bold">+kota</div>
+        <div class="font-bold text-sm text-color-secondary" style="text-transform:capitalize">{{ hoy() }}</div>
+      </div>
     </div>
+    <p-tag value="Menú Principal" severity="warn" icon="pi pi-heart-fill" />
   </div>
-</div>
 
-<!-- Estadísticas -->
-<div class="slide-in" style="margin-bottom: 2rem;">
-  <div class="grid">
-    <div class="col-12 md:col-4">
-      <p-card [ngStyle]="{'background': '#fef3c7', 'border-left': '4px solid #f59e0b'}">
-        <div style="text-align: center;">
-          <i class="pi pi-heart" style="font-size: 2.5rem; color: #f59e0b;"></i>
-          <h3 style="font-size: 2rem; font-weight: bold; margin: 0.5rem 0; color: #92400e;">{{totalMascotas}}</h3>
-          <p style="color: #78350f; margin: 0;">Mascotas Registradas</p>
-        </div>
+  <p-divider />
+
+  <!-- Cards de navegación -->
+  <div class="grid mt-3">
+    @for (card of cards; track card.titulo) {
+    <div class="fade-in col-12 md:col-6" (click)="navegarCard(card)" (mousemove)="onTilt($event)"
+      (mouseleave)="onTiltReset($event)">
+      <p-card styleClass="rh-card">
+        <ng-template #header>
+          <div class="rh-banner" [ngStyle]="{'background': card.color}">
+            <div class="rh-icon-wrap">
+              <i class="{{ card.icono }} rh-icon"></i>
+            </div>
+          </div>
+        </ng-template>
+        <div class="text-xl font-bold mb-1">{{ card.titulo }}</div>
+        <div class="text-color-secondary text-sm mb-3">{{ card.descripcion }}</div>
+        <ng-template #footer>
+          <div class="flex align-items-center justify-content-between">
+            <p-tag [value]="card.tag" [severity]="card.tagSeverity" [icon]="card.tagIcono" />
+            <p-button icon="pi pi-arrow-right" [rounded]="true" [text]="true" severity="secondary" />
+          </div>
+        </ng-template>
       </p-card>
     </div>
-    <div class="col-12 md:col-4">
-      <p-card [ngStyle]="{'background': '#dcfce7', 'border-left': '4px solid #22c55e'}">
-        <div style="text-align: center;">
-          <i class="pi pi-check-circle" style="font-size: 2.5rem; color: #22c55e;"></i>
-          <h3 style="font-size: 2rem; font-weight: bold; margin: 0.5rem 0; color: #14532d;">{{totalMascotas}}</h3>
-          <p style="color: #166534; margin: 0;">Registros Activos</p>
-        </div>
-      </p-card>
-    </div>
-    <div class="col-12 md:col-4">
-      <p-card [ngStyle]="{'background': '#dbeafe', 'border-left': '4px solid #3b82f6'}">
-        <div style="text-align: center;">
-          <i class="pi pi-users" style="font-size: 2.5rem; color: #3b82f6;"></i>
-          <h3 style="font-size: 2rem; font-weight: bold; margin: 0.5rem 0; color: #1e3a8a;">{{totalMascotas}}</h3>
-          <p style="color: #1e40af; margin: 0;">Dueños Registrados</p>
-        </div>
-      </p-card>
-    </div>
+    }
   </div>
-</div>
 
-<!-- Botón Registrar -->
-<div style="margin-bottom: 2rem; text-align: right;">
-  <p-button label="Registrar Nueva Mascota" icon="pi pi-plus" (onClick)="abrirDialog()" severity="help"></p-button>
-</div>
+  <p-divider />
 
-<!-- Tabla de Mascotas -->
-<p-card>
-  <p-table [value]="mascotas()" [tableStyle]="{'min-width': '50rem'}">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Nombre</th>
-        <th>Raza</th>
-        <th>Edad</th>
-        <th>Peso (kg)</th>
-        <th>Color</th>
-        <th>Dueño</th>
-        <th>Teléfono</th>
-        <th>Fecha Registro</th>
-        <th>Acciones</th>
-      </tr>
+  <!-- Estadísticas -->
+  <div class="grid mb-4">
+
+    <div class="col-12 md:col-4">
+      <div class="stat-card stat-card-orange slide-in">
+        <div class="stat-icon-wrap">
+          <i class="pi pi-heart-fill stat-icon"></i>
+        </div>
+        <div class="stat-numero">{{ totalMascotas }}</div>
+        <div class="stat-label">Maskotas Registradas</div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-4">
+      <div class="stat-card stat-card-green slide-in" style="animation-delay: 0.1s">
+        <div class="stat-icon-wrap">
+          <i class="pi pi-check-circle stat-icon"></i>
+        </div>
+        <div class="stat-numero">{{ totalMascotas }}</div>
+        <div class="stat-label">Registros Activos</div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-4">
+      <div class="stat-card stat-card-blue slide-in" style="animation-delay: 0.2s">
+        <div class="stat-icon-wrap">
+          <i class="pi pi-users stat-icon"></i>
+        </div>
+        <div class="stat-numero">{{ totalMascotas }}</div>
+        <div class="stat-label">Dueños Registrados</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Botón Registrar -->
+  <div style="margin-bottom: 2rem; text-align: right;">
+    <p-button label="Registrar Nueva Mascota" icon="pi pi-plus" (onClick)="abrirDialog()" severity="help"></p-button>
+  </div>
+
+  <!-- Tabla de Mascotas -->
+  <p-card>
+    <p-table [value]="mascotas()" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nombre</th>
+          <th>Raza</th>
+          <th>Edad</th>
+          <th>Peso (kg)</th>
+          <th>Color</th>
+          <th>Dueño</th>
+          <th>Teléfono</th>
+          <th>Fecha Registro</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-mascota>
+        <tr>
+          <td>{{mascota.nombre}}</td>
+          <td>{{mascota.raza}}</td>
+          <td>{{mascota.edad}} años</td>
+          <td>{{mascota.peso}} kg</td>
+          <td>{{mascota.color}}</td>
+          <td>{{mascota.dueno}}</td>
+          <td>{{mascota.telefono}}</td>
+          <td>{{mascota.fechaRegistro}}</td>
+          <td>
+            <p-button icon="pi pi-pencil" (onClick)="abrirDialog(mascota)" [text]="true" severity="info"></p-button>
+            <p-button icon="pi pi-trash" (onClick)="eliminarMascota(mascota.id)" [text]="true"
+              severity="danger"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Dialog Formulario -->
+  <p-dialog [header]="isEdit() ? 'Editar Mascota' : 'Registrar Mascota'" [visible]="dialogVisible()"
+    (onHide)="dialogVisible.set(false)" [modal]="true" [style]="{width: '50vw'}">
+    <div class="formgrid grid">
+      <div class="field col-12 md:col-6">
+        <label>Nombre</label>
+        <input pInputText [(ngModel)]="mascotaForm.nombre" class="w-full" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <label>Raza</label>
+        <input pInputText [(ngModel)]="mascotaForm.raza" class="w-full" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <label>Edad (años)</label>
+        <p-inputNumber [(ngModel)]="mascotaForm.edad" [min]="0" class="w-full"></p-inputNumber>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label>Peso (kg)</label>
+        <p-inputNumber [(ngModel)]="mascotaForm.peso" [min]="0" [minFractionDigits]="1" class="w-full"></p-inputNumber>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label>Color</label>
+        <input pInputText [(ngModel)]="mascotaForm.color" class="w-full" />
+      </div>
+      <div class="field col-12 md:col-6">
+        <label>Dueño</label>
+        <input pInputText [(ngModel)]="mascotaForm.dueno" class="w-full" />
+      </div>
+      <div class="field col-12">
+        <label>Teléfono</label>
+        <input pInputText [(ngModel)]="mascotaForm.telefono" class="w-full" />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancelar" (onClick)="dialogVisible.set(false)" severity="secondary"></p-button>
+      <p-button label="Guardar" (onClick)="guardarMascota()" severity="help"></p-button>
     </ng-template>
-    <ng-template pTemplate="body" let-mascota>
-      <tr>
-        <td>{{mascota.nombre}}</td>
-        <td>{{mascota.raza}}</td>
-        <td>{{mascota.edad}} años</td>
-        <td>{{mascota.peso}} kg</td>
-        <td>{{mascota.color}}</td>
-        <td>{{mascota.dueno}}</td>
-        <td>{{mascota.telefono}}</td>
-        <td>{{mascota.fechaRegistro}}</td>
-        <td>
-          <p-button icon="pi pi-pencil" (onClick)="abrirDialog(mascota)" [text]="true" severity="info"></p-button>
-          <p-button icon="pi pi-trash" (onClick)="eliminarMascota(mascota.id)" [text]="true" severity="danger"></p-button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</p-card>
+  </p-dialog>
 
-<!-- Dialog Formulario -->
-<p-dialog [header]="isEdit() ? 'Editar Mascota' : 'Registrar Mascota'" [visible]="dialogVisible()" (onHide)="dialogVisible.set(false)" [modal]="true" [style]="{width: '50vw'}">
-  <div class="formgrid grid">
-    <div class="field col-12 md:col-6">
-      <label>Nombre</label>
-      <input pInputText [(ngModel)]="mascotaForm.nombre" class="w-full" />
-    </div>
-    <div class="field col-12 md:col-6">
-      <label>Raza</label>
-      <input pInputText [(ngModel)]="mascotaForm.raza" class="w-full" />
-    </div>
-    <div class="field col-12 md:col-6">
-      <label>Edad (años)</label>
-      <p-inputNumber [(ngModel)]="mascotaForm.edad" [min]="0" class="w-full"></p-inputNumber>
-    </div>
-    <div class="field col-12 md:col-6">
-      <label>Peso (kg)</label>
-      <p-inputNumber [(ngModel)]="mascotaForm.peso" [min]="0" [minFractionDigits]="1" class="w-full"></p-inputNumber>
-    </div>
-    <div class="field col-12 md:col-6">
-      <label>Color</label>
-      <input pInputText [(ngModel)]="mascotaForm.color" class="w-full" />
-    </div>
-    <div class="field col-12 md:col-6">
-      <label>Dueño</label>
-      <input pInputText [(ngModel)]="mascotaForm.dueno" class="w-full" />
-    </div>
-    <div class="field col-12">
-      <label>Teléfono</label>
-      <input pInputText [(ngModel)]="mascotaForm.telefono" class="w-full" />
-    </div>
-  </div>
-  <ng-template pTemplate="footer">
-    <p-button label="Cancelar" (onClick)="dialogVisible.set(false)" severity="secondary"></p-button>
-    <p-button label="Guardar" (onClick)="guardarMascota()" severity="help"></p-button>
-  </ng-template>
-</p-dialog>
-
-<!-- Contacto +kota -->
-<p-panel class="scale-in" header="Contáctanos" [toggleable]="true" style="margin-top: 2rem;">
-  <div style="text-align: center; margin-bottom: 2rem;">
-    <i class="pi pi-heart-fill" style="font-size: 3rem; color: #f97316; margin-bottom: 1rem;"></i>
-    <h3 style="font-size: 1.5rem; font-weight: bold; color: #f97316; margin: 0;">+kota</h3>
-    <p style="font-size: 1.125rem; font-weight: 500; margin-top: 1rem; margin-bottom: 0;">¿Necesitas ayuda con el registro?</p>
-  </div>
-
-  <div class="formgrid grid">
-    <div class="field col-12 md:col-4" style="text-align: center;">
-      <i class="pi pi-envelope" style="font-size: 2rem; color: #f97316;"></i>
-      <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Email</label>
-      <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">registro@maskota.com</p>
+  <!-- Contacto +kota -->
+  <p-panel class="scale-in" header="Contáctanos" [toggleable]="true" style="margin-top: 2rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <i class="pi pi-heart-fill" style="font-size: 3rem; color: #f97316; margin-bottom: 1rem;"></i>
+      <h3 style="font-size: 1.5rem; font-weight: bold; color: #f97316; margin: 0;">+kota</h3>
+      <p style="font-size: 1.125rem; font-weight: 500; margin-top: 1rem; margin-bottom: 0;">¿Necesitas ayuda con el
+        registro?</p>
     </div>
 
-    <div class="field col-12 md:col-4" style="text-align: center;">
-      <i class="pi pi-phone" style="font-size: 2rem; color: #f97316;"></i>
-      <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Contacto</label>
-      <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">Danie Salgado</p>
-      <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">+52 1 55 8688 2793</p>
-    </div>
+    <div class="formgrid grid">
+      <div class="field col-12 md:col-4" style="text-align: center;">
+        <i class="pi pi-envelope" style="font-size: 2rem; color: #f97316;"></i>
+        <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Email</label>
+        <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">registro@maskota.com</p>
+      </div>
 
-    <div class="field col-12 md:col-4" style="text-align: center;">
-      <i class="pi pi-map-marker" style="font-size: 2rem; color: #f97316;"></i>
-      <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Ubicación</label>
-      <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">Centro de Registro +kota</p>
+      <div class="field col-12 md:col-4" style="text-align: center;">
+        <i class="pi pi-phone" style="font-size: 2rem; color: #f97316;"></i>
+        <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Contacto</label>
+        <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">Danie Salgado</p>
+        <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">+52 1 55 8688 2793</p>
+      </div>
+
+      <div class="field col-12 md:col-4" style="text-align: center;">
+        <i class="pi pi-map-marker" style="font-size: 2rem; color: #f97316;"></i>
+        <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Ubicación</label>
+        <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">Centro de Registro +kota</p>
+      </div>
     </div>
-  </div>
-</p-panel>
+  </p-panel>

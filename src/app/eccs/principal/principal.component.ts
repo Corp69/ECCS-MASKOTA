@@ -1,9 +1,21 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import ImportsModule from '@shared/primeng/ImportsModule';
 import { EcssMsjLoadingComponent } from '@shared/eccs/msj/loading/loading.component';
+
+interface CardMenu {
+  titulo: string;
+  descripcion: string;
+  icono: string;
+  color: string;
+  tag: string;
+  tagSeverity: 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast';
+  tagIcono: string;
+  ruta: string | null;
+}
 
 interface Mascota {
   id: number;
@@ -21,21 +33,52 @@ interface Mascota {
   imports: [
     NgStyle,
     FormsModule,
-    ImportsModule, 
+    ImportsModule,
     EcssMsjLoadingComponent
   ],
-  providers: [ MessageService ],
-  templateUrl: './principal.component.html'
+  providers: [MessageService],
+  templateUrl: './principal.component.html',
+  styleUrl: './principal.component.css'
 })
 export default class PrincipalComponent implements OnInit {
   public Eccsblocked = signal<boolean>(false);
+
+  public hoy = signal(
+    new Date().toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' })
+  );
+
+
+
+  public cards: CardMenu[] = [
+    {
+      titulo: 'Gestión Clientes',
+      descripcion: 'Administra los clientes y dueños de maskotas',
+      icono: 'pi pi-users',
+      color: 'linear-gradient(135deg, #1d4ed8, #3b82f6)',
+      tag: 'Clientes',
+      tagSeverity: 'info',
+      tagIcono: 'pi pi-user',
+      ruta: null,
+    },
+    {
+      titulo: '+Maskotas',
+      descripcion: 'Registra y gestiona el historial de maskotas',
+      icono: 'pi pi-heart-fill',
+      color: 'linear-gradient(135deg, #c2410c, #fb923c)',
+      tag: 'Maskotas',
+      tagSeverity: 'warn',
+      tagIcono: 'pi pi-heart',
+      ruta: null,
+    },
+  ];
+
   public mascotas = signal<Mascota[]>([]);
   public dialogVisible = signal<boolean>(false);
   public isEdit = signal<boolean>(false);
-  
+
   public mascotaForm: Mascota = this.resetForm();
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private router: Router) { }
 
   public ngOnInit(): void {
     this.cargarMascotas();
@@ -75,7 +118,7 @@ export default class PrincipalComponent implements OnInit {
 
   public guardarMascota(): void {
     const mascotas = [...this.mascotas()];
-    
+
     if (this.isEdit()) {
       const index = mascotas.findIndex(m => m.id === this.mascotaForm.id);
       mascotas[index] = this.mascotaForm;
@@ -86,7 +129,7 @@ export default class PrincipalComponent implements OnInit {
       mascotas.push(this.mascotaForm);
       this.messageService.add({ severity: 'success', summary: 'Registrado', detail: 'Mascota registrada correctamente' });
     }
-    
+
     localStorage.setItem('mascotas', JSON.stringify(mascotas));
     this.mascotas.set(mascotas);
     this.dialogVisible.set(false);
@@ -105,5 +148,28 @@ export default class PrincipalComponent implements OnInit {
 
   public get totalMascotas(): number {
     return this.mascotas().length;
+  }
+
+  public onTilt(e: MouseEvent): void {
+    const el = (e.currentTarget as HTMLElement).querySelector('.rh-card') as HTMLElement;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 14;
+    el.style.transform = `perspective(600px) rotateY(${x}deg) rotateX(${-y}deg) translateY(-4px)`;
+  }
+
+  public onTiltReset(e: MouseEvent): void {
+    const el = (e.currentTarget as HTMLElement).querySelector('.rh-card') as HTMLElement;
+    if (!el) return;
+    el.style.transform = '';
+  }
+
+  public navegarCard(card: CardMenu): void {
+    if (card.ruta === null) {
+      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'En desarrollo 🚧', detail: `"${card.titulo}" estará disponible próximamente`, life: 3000 });
+      return;
+    }
+    this.router.navigate([card.ruta]);
   }
 }
