@@ -73,6 +73,7 @@ export default class PrincipalComponent implements OnInit {
   ];
 
   public mascotas = signal<Mascota[]>([]);
+  public filaSeleccionada = signal<number | null>(null);
   public dialogVisible = signal<boolean>(false);
   public isEdit = signal<boolean>(false);
 
@@ -151,16 +152,16 @@ export default class PrincipalComponent implements OnInit {
   }
 
   public onTilt(e: MouseEvent): void {
-    const el = (e.currentTarget as HTMLElement).querySelector('.rh-card') as HTMLElement;
+    const el = e.currentTarget as HTMLElement;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 14;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 14;
+    const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 14;
+    const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 14;
     el.style.transform = `perspective(600px) rotateY(${x}deg) rotateX(${-y}deg) translateY(-4px)`;
   }
 
   public onTiltReset(e: MouseEvent): void {
-    const el = (e.currentTarget as HTMLElement).querySelector('.rh-card') as HTMLElement;
+    const el = e.currentTarget as HTMLElement;
     if (!el) return;
     el.style.transform = '';
   }

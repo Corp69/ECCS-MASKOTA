@@ -56,7 +56,9 @@
   <div class="grid mb-4">
 
     <div class="col-12 md:col-4">
-      <div class="stat-card stat-card-orange slide-in">
+      <div class="stat-card stat-card-orange slide-in"
+           (mousemove)="onTilt($event)"
+           (mouseleave)="onTiltReset($event)">
         <div class="stat-icon-wrap">
           <i class="pi pi-heart-fill stat-icon"></i>
         </div>
@@ -66,7 +68,9 @@
     </div>
 
     <div class="col-12 md:col-4">
-      <div class="stat-card stat-card-green slide-in" style="animation-delay: 0.1s">
+      <div class="stat-card stat-card-green slide-in" style="animation-delay: 0.1s"
+           (mousemove)="onTilt($event)"
+           (mouseleave)="onTiltReset($event)">
         <div class="stat-icon-wrap">
           <i class="pi pi-check-circle stat-icon"></i>
         </div>
@@ -76,7 +80,9 @@
     </div>
 
     <div class="col-12 md:col-4">
-      <div class="stat-card stat-card-blue slide-in" style="animation-delay: 0.2s">
+      <div class="stat-card stat-card-blue slide-in" style="animation-delay: 0.2s"
+           (mousemove)="onTilt($event)"
+           (mouseleave)="onTiltReset($event)">
         <div class="stat-icon-wrap">
           <i class="pi pi-users stat-icon"></i>
         </div>
@@ -88,15 +94,32 @@
   </div>
 
   <!-- Botón Registrar -->
-  <div style="margin-bottom: 2rem; text-align: right;">
+  <!-- <div style="margin-bottom: 2rem; text-align: right;">
     <p-button label="Registrar Nueva Mascota" icon="pi pi-plus" (onClick)="abrirDialog()" severity="help"></p-button>
-  </div>
+  </div> -->
 
   <!-- Tabla de Mascotas -->
-  <p-card>
-    <p-table [value]="mascotas()" [tableStyle]="{'min-width': '50rem'}">
+  <p-card styleClass="fade-in">
+    <ng-template #header>
+      <div style="background: linear-gradient(135deg, #1e293b, #0f172a); padding: 1.5rem 2rem; border-radius: 8px 8px 0 0;">
+        <div class="flex align-items-center justify-content-between">
+          <div class="flex align-items-center gap-3">
+            <div style="background: rgba(249,115,22,0.2); border-radius: 50%; width: 3rem; height: 3rem; display:flex; align-items:center; justify-content:center;">
+              <i class="pi pi-list" style="color: #f97316; font-size: 1.4rem;"></i>
+            </div>
+            <div>
+              <div class="font-bold text-white" style="font-size: 1.2rem;">Listado de Maskotas</div>
+              <div style="color: #94a3b8; font-size: 0.85rem;">{{ totalMascotas }} registros encontrados</div>
+            </div>
+          </div>
+          <p-button label="Nueva Maskota" icon="pi pi-plus" size="small" (onClick)="abrirDialog()" severity="warn" />
+        </div>
+      </div>
+    </ng-template>
+    <p-table [value]="mascotas()" [tableStyle]="{'min-width': '50rem'}" styleClass="p-datatable-striped p-datatable-sm">
       <ng-template pTemplate="header">
         <tr>
+          <th style="width: 8rem;">Acciones</th>
           <th>Nombre</th>
           <th>Raza</th>
           <th>Edad</th>
@@ -105,12 +128,17 @@
           <th>Dueño</th>
           <th>Teléfono</th>
           <th>Fecha Registro</th>
-          <th>Acciones</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-mascota>
-        <tr>
-          <td>{{mascota.nombre}}</td>
+        <tr class="tabla-row"
+            [class.tabla-row-selected]="filaSeleccionada() === mascota.id"
+            (click)="filaSeleccionada.set(mascota.id)">
+          <td>
+            <p-button icon="pi pi-pencil" (onClick)="abrirDialog(mascota); $event.stopPropagation()" [text]="true" severity="info" size="small" />
+            <p-button icon="pi pi-trash" (onClick)="eliminarMascota(mascota.id); $event.stopPropagation()" [text]="true" severity="danger" size="small" />
+          </td>
+          <td><span class="font-semibold">{{mascota.nombre}}</span></td>
           <td>{{mascota.raza}}</td>
           <td>{{mascota.edad}} años</td>
           <td>{{mascota.peso}} kg</td>
@@ -118,11 +146,6 @@
           <td>{{mascota.dueno}}</td>
           <td>{{mascota.telefono}}</td>
           <td>{{mascota.fechaRegistro}}</td>
-          <td>
-            <p-button icon="pi pi-pencil" (onClick)="abrirDialog(mascota)" [text]="true" severity="info"></p-button>
-            <p-button icon="pi pi-trash" (onClick)="eliminarMascota(mascota.id)" [text]="true"
-              severity="danger"></p-button>
-          </td>
         </tr>
       </ng-template>
     </p-table>
@@ -168,32 +191,55 @@
   </p-dialog>
 
   <!-- Contacto +kota -->
-  <p-panel class="scale-in" header="Contáctanos" [toggleable]="true" style="margin-top: 2rem;">
-    <div style="text-align: center; margin-bottom: 2rem;">
-      <i class="pi pi-heart-fill" style="font-size: 3rem; color: #f97316; margin-bottom: 1rem;"></i>
-      <h3 style="font-size: 1.5rem; font-weight: bold; color: #f97316; margin: 0;">+kota</h3>
-      <p style="font-size: 1.125rem; font-weight: 500; margin-top: 1rem; margin-bottom: 0;">¿Necesitas ayuda con el
-        registro?</p>
-    </div>
+  <div class="fade-in" style="margin-top: 2rem;">
+    <p-card>
+      <ng-template #header>
+        <div style="background: linear-gradient(135deg, #1e293b, #0f172a); padding: 1.5rem 2rem; border-radius: 8px 8px 0 0;">
+          <div class="flex align-items-center gap-3">
+            <div style="background: rgba(249,115,22,0.2); border-radius: 50%; width: 3rem; height: 3rem; display:flex; align-items:center; justify-content:center;">
+              <i class="pi pi-heart-fill" style="color: #f97316; font-size: 1.4rem;"></i>
+            </div>
+            <div>
+              <div class="font-bold text-white" style="font-size: 1.2rem;">+kota</div>
+              <div style="color: #94a3b8; font-size: 0.85rem;">¿Necesitas ayuda con el registro?</div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
 
-    <div class="formgrid grid">
-      <div class="field col-12 md:col-4" style="text-align: center;">
-        <i class="pi pi-envelope" style="font-size: 2rem; color: #f97316;"></i>
-        <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Email</label>
-        <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">registro@maskota.com</p>
-      </div>
+      <div class="grid mt-2">
 
-      <div class="field col-12 md:col-4" style="text-align: center;">
-        <i class="pi pi-phone" style="font-size: 2rem; color: #f97316;"></i>
-        <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Contacto</label>
-        <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">Danie Salgado</p>
-        <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">+52 1 55 8688 2793</p>
-      </div>
+        <div class="col-12 md:col-4">
+          <div class="contacto-item">
+            <div class="contacto-icon-wrap" style="background: linear-gradient(135deg, #c2410c, #fb923c);">
+              <i class="pi pi-envelope" style="color: white; font-size: 1.4rem;"></i>
+            </div>
+            <div class="font-bold mt-2 mb-1">Email</div>
+            <div style="color: #64748b; font-size: 0.9rem;">registro@maskota.com</div>
+          </div>
+        </div>
 
-      <div class="field col-12 md:col-4" style="text-align: center;">
-        <i class="pi pi-map-marker" style="font-size: 2rem; color: #f97316;"></i>
-        <label style="display: block; font-weight: 600; margin-top: 0.5rem;">Ubicación</label>
-        <p style="color: #6b7280; margin-top: 0.25rem; margin-bottom: 0;">Centro de Registro +kota</p>
+        <div class="col-12 md:col-4">
+          <div class="contacto-item">
+            <div class="contacto-icon-wrap" style="background: linear-gradient(135deg, #15803d, #4ade80);">
+              <i class="pi pi-phone" style="color: white; font-size: 1.4rem;"></i>
+            </div>
+            <div class="font-bold mt-2 mb-1">Contacto</div>
+            <div style="color: #64748b; font-size: 0.9rem;">Danie Salgado</div>
+            <div style="color: #64748b; font-size: 0.9rem;">+52 1 55 8688 2793</div>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-4">
+          <div class="contacto-item">
+            <div class="contacto-icon-wrap" style="background: linear-gradient(135deg, #1d4ed8, #60a5fa);">
+              <i class="pi pi-map-marker" style="color: white; font-size: 1.4rem;"></i>
+            </div>
+            <div class="font-bold mt-2 mb-1">Ubicación</div>
+            <div style="color: #64748b; font-size: 0.9rem;">Centro de Registro +kota</div>
+          </div>
+        </div>
+
       </div>
-    </div>
-  </p-panel>
+    </p-card>
+  </div>
