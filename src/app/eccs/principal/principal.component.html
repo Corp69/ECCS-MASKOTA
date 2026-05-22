@@ -152,42 +152,87 @@
   </p-card>
 
   <!-- Dialog Formulario -->
-  <p-dialog [header]="isEdit() ? 'Editar Mascota' : 'Registrar Mascota'" [visible]="dialogVisible()"
-    (onHide)="dialogVisible.set(false)" [modal]="true" [style]="{width: '50vw'}">
-    <div class="formgrid grid">
-      <div class="field col-12 md:col-6">
-        <label>Nombre</label>
-        <input pInputText [(ngModel)]="mascotaForm.nombre" class="w-full" />
+  <p-dialog [visible]="dialogVisible()" (onHide)="dialogVisible.set(false)" [modal]="true" [style]="{width: '55vw'}" [draggable]="false" [resizable]="false">
+
+    <ng-template pTemplate="header">
+      <div style="background: linear-gradient(135deg, #1e293b, #0f172a); margin: -1.25rem -1.25rem 0; padding: 1.25rem 1.5rem; border-radius: 8px 8px 0 0; width: calc(100% + 2.5rem);">
+        <div class="flex align-items-center gap-3">
+          <div style="background: rgba(249,115,22,0.2); border-radius: 50%; width: 2.8rem; height: 2.8rem; display:flex; align-items:center; justify-content:center;">
+            <i class="pi pi-heart-fill" style="color: #f97316; font-size: 1.2rem;"></i>
+          </div>
+          <div>
+            <div class="font-bold text-white" style="font-size: 1.1rem;">{{ isEdit() ? 'Editar Maskota' : 'Registrar Maskota' }}</div>
+            <div style="color: #94a3b8; font-size: 0.8rem;">Completa todos los campos del formulario</div>
+          </div>
+        </div>
       </div>
-      <div class="field col-12 md:col-6">
-        <label>Raza</label>
-        <input pInputText [(ngModel)]="mascotaForm.raza" class="w-full" />
-      </div>
-      <div class="field col-12 md:col-6">
-        <label>Edad (años)</label>
-        <p-inputNumber [(ngModel)]="mascotaForm.edad" [min]="0" class="w-full"></p-inputNumber>
-      </div>
-      <div class="field col-12 md:col-6">
-        <label>Peso (kg)</label>
-        <p-inputNumber [(ngModel)]="mascotaForm.peso" [min]="0" [minFractionDigits]="1" class="w-full"></p-inputNumber>
-      </div>
-      <div class="field col-12 md:col-6">
-        <label>Color</label>
-        <input pInputText [(ngModel)]="mascotaForm.color" class="w-full" />
-      </div>
-      <div class="field col-12 md:col-6">
-        <label>Dueño</label>
-        <input pInputText [(ngModel)]="mascotaForm.dueno" class="w-full" />
-      </div>
-      <div class="field col-12">
-        <label>Teléfono</label>
-        <input pInputText [(ngModel)]="mascotaForm.telefono" class="w-full" />
-      </div>
-    </div>
-    <ng-template pTemplate="footer">
-      <p-button label="Cancelar" (onClick)="dialogVisible.set(false)" severity="secondary"></p-button>
-      <p-button label="Guardar" (onClick)="guardarMascota()" severity="help"></p-button>
     </ng-template>
+
+    <div class="pt-3">
+
+      <!-- Sección: Datos de la maskota -->
+      <div class="dialog-seccion">
+        <div class="dialog-seccion-titulo">
+          <i class="pi pi-heart mr-2" style="color: #f97316;"></i>Datos de la Maskota
+        </div>
+        <div class="formgrid grid">
+          <div class="field col-12 md:col-6">
+            <label class="dialog-label"><i class="pi pi-tag mr-1"></i>Nombre +kota</label>
+            <input pInputText [(ngModel)]="mascotaForm.nombre" class="w-full" placeholder="Ej. Max" />
+          </div>
+          <div class="field col-12 md:col-6">
+            <label class="dialog-label"><i class="pi pi-star mr-1"></i>Raza</label>
+            <input pInputText [(ngModel)]="mascotaForm.raza" class="w-full" placeholder="Ej. Labrador" />
+          </div>
+          <div class="field col-12 md:col-4">
+            <label class="dialog-label"><i class="pi pi-calendar mr-1"></i>Edad (años)</label>
+            <p-inputNumber [(ngModel)]="mascotaForm.edad" [min]="0" class="w-full" />
+          </div>
+          <div class="field col-12 md:col-4">
+            <label class="dialog-label"><i class="pi pi-chart-bar mr-1"></i>Peso (kg)</label>
+            <p-inputNumber [(ngModel)]="mascotaForm.peso" [min]="0" [minFractionDigits]="1" class="w-full" />
+          </div>
+          <div class="field col-12 md:col-4">
+            <label class="dialog-label"><i class="pi pi-palette mr-1"></i>Color</label>
+            <input pInputText [(ngModel)]="mascotaForm.color" class="w-full" placeholder="Ej. Dorado" />
+          </div>
+          <div class="field col-12">
+            <label class="dialog-label"><i class="pi pi-id-card mr-1"></i>Número de Registro RFID</label>
+            <input pInputText [(ngModel)]="mascotaForm.rfid" class="w-full" placeholder="Ej. RFID-00123456" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección: Datos del dueño -->
+      <div class="dialog-seccion">
+        <div class="dialog-seccion-titulo">
+          <i class="pi pi-user mr-2" style="color: #3b82f6;"></i>Datos del Dueño
+        </div>
+        <div class="formgrid grid">
+          <div class="field col-12 md:col-6">
+            <label class="dialog-label"><i class="pi pi-user mr-1"></i>Dueño</label>
+            <input pInputText [(ngModel)]="mascotaForm.dueno" class="w-full" placeholder="Nombre completo" />
+          </div>
+          <div class="field col-12 md:col-6">
+            <label class="dialog-label"><i class="pi pi-phone mr-1"></i>Teléfono</label>
+            <input pInputText [(ngModel)]="mascotaForm.telefono" class="w-full" placeholder="Ej. 5512345678" />
+          </div>
+          <div class="field col-12">
+            <label class="dialog-label"><i class="pi pi-envelope mr-1"></i>Correo Electrónico</label>
+            <input pInputText [(ngModel)]="mascotaForm.correo" class="w-full" placeholder="correo@ejemplo.com" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-content-end gap-2">
+        <p-button label="Cancelar" icon="pi pi-times" (onClick)="dialogVisible.set(false)" severity="secondary" [outlined]="true" />
+        <p-button label="Guardar" icon="pi pi-check" (onClick)="guardarMascota()" severity="warn" />
+      </div>
+    </ng-template>
+
   </p-dialog>
 
   <!-- Contacto +kota -->

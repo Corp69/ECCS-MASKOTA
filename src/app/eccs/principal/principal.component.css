@@ -75,6 +75,37 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Dialog secciones */
+.dialog-seccion {
+  margin-bottom: 1.25rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.dialog-seccion-titulo {
+  background: #f8fafc;
+  padding: 0.6rem 1rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dialog-seccion .formgrid {
+  padding: 1rem;
+}
+
+.dialog-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #475569;
+  margin-bottom: 0.35rem;
+  display: block;
+}
+
 /* Contacto */
 .contacto-item {
   text-align: center;

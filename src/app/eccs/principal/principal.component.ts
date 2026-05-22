@@ -26,6 +26,8 @@ interface Mascota {
   color: string;
   dueno: string;
   telefono: string;
+  correo: string;
+  rfid: string;
   fechaRegistro: string;
 }
 
@@ -86,6 +88,10 @@ export default class PrincipalComponent implements OnInit {
   }
 
   private cargarMascotas(): void {
+    if (typeof localStorage === 'undefined') {
+      this.inicializarDatos();
+      return;
+    }
     const data = localStorage.getItem('mascotas');
     if (data) {
       this.mascotas.set(JSON.parse(data));
@@ -96,13 +102,15 @@ export default class PrincipalComponent implements OnInit {
 
   private inicializarDatos(): void {
     const mascotasIniciales: Mascota[] = [
-      { id: 1, nombre: 'Max', raza: 'Labrador', edad: 3, peso: 30, color: 'Dorado', dueno: 'Juan Perez', telefono: '5512345678', fechaRegistro: '2024-01-15' },
-      { id: 2, nombre: 'Luna', raza: 'Chihuahua', edad: 2, peso: 3, color: 'Cafe', dueno: 'Maria Garcia', telefono: '5523456789', fechaRegistro: '2024-02-20' },
-      { id: 3, nombre: 'Rocky', raza: 'Pastor Aleman', edad: 4, peso: 35, color: 'Negro', dueno: 'Carlos Lopez', telefono: '5534567890', fechaRegistro: '2024-03-10' },
-      { id: 4, nombre: 'Bella', raza: 'Poodle', edad: 1, peso: 5, color: 'Blanco', dueno: 'Ana Martinez', telefono: '5545678901', fechaRegistro: '2024-04-05' },
-      { id: 5, nombre: 'Thor', raza: 'Husky', edad: 5, peso: 28, color: 'Gris', dueno: 'Pedro Sanchez', telefono: '5556789012', fechaRegistro: '2024-05-12' }
+      { id: 1, nombre: 'Max',   raza: 'Labrador',      edad: 3, peso: 30, color: 'Dorado', dueno: 'Juan Perez',    telefono: '5512345678', correo: 'juan@email.com',    rfid: 'RFID-00000001', fechaRegistro: '2024-01-15' },
+      { id: 2, nombre: 'Luna',  raza: 'Chihuahua',     edad: 2, peso: 3,  color: 'Cafe',   dueno: 'Maria Garcia',  telefono: '5523456789', correo: 'maria@email.com',   rfid: 'RFID-00000002', fechaRegistro: '2024-02-20' },
+      { id: 3, nombre: 'Rocky', raza: 'Pastor Aleman', edad: 4, peso: 35, color: 'Negro',  dueno: 'Carlos Lopez',  telefono: '5534567890', correo: 'carlos@email.com',  rfid: 'RFID-00000003', fechaRegistro: '2024-03-10' },
+      { id: 4, nombre: 'Bella', raza: 'Poodle',        edad: 1, peso: 5,  color: 'Blanco', dueno: 'Ana Martinez',  telefono: '5545678901', correo: 'ana@email.com',     rfid: 'RFID-00000004', fechaRegistro: '2024-04-05' },
+      { id: 5, nombre: 'Thor',  raza: 'Husky',         edad: 5, peso: 28, color: 'Gris',   dueno: 'Pedro Sanchez', telefono: '5556789012', correo: 'pedro@email.com',   rfid: 'RFID-00000005', fechaRegistro: '2024-05-12' }
     ];
-    localStorage.setItem('mascotas', JSON.stringify(mascotasIniciales));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('mascotas', JSON.stringify(mascotasIniciales));
+    }
     this.mascotas.set(mascotasIniciales);
   }
 
@@ -144,7 +152,7 @@ export default class PrincipalComponent implements OnInit {
   }
 
   private resetForm(): Mascota {
-    return { id: 0, nombre: '', raza: '', edad: 0, peso: 0, color: '', dueno: '', telefono: '', fechaRegistro: '' };
+    return { id: 0, nombre: '', raza: '', edad: 0, peso: 0, color: '', dueno: '', telefono: '', correo: '', rfid: '', fechaRegistro: '' };
   }
 
   public get totalMascotas(): number {
