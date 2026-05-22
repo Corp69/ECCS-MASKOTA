@@ -11,9 +11,8 @@ import Aura from '@primeuix/themes/aura';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes), provideClientHydration(withEventReplay()),
+    provideClientHydration(withEventReplay()),
     provideZonelessChangeDetection(),
-    //routes
     provideRouter(routes, withViewTransitions({ skipInitialTransition: true, onViewTransitionCreated(transitionInfo) { }, })),
     //forms
     importProvidersFrom(ReactiveFormsModule),

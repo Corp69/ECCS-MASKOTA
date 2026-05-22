@@ -1,0 +1,13 @@
+<!-- Loading Animation -->
+<div *ngIf="isLoading()" class="loading-container">
+  <div class="loading-content">
+    <div class="spinner"></div>
+    <h2>Scorpio XL</h2>
+    <p>Cargando sistema...</p>
+  </div>
+</div>
+
+<!-- Content after loading -->
+<div *ngIf="!isLoading()" class="main-content">
+  <ng-content></ng-content>
+</div>

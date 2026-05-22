@@ -1,0 +1,195 @@
+<p-blockUI [blocked]="Ariesblocked()"></p-blockUI>
+<p-toast position="top-center" key="tc"></p-toast>
+<!-- @if(Ariesblocked()) { <maskota-msj-loading /> } -->
+
+<div class="min-h-screen flex">
+
+  <!-- IZQUIERDA: Branding (solo desktop) -->
+  <div class="hidden lg:flex w-1/2 flex-col align-items-center justify-content-center gap-4 p-8"
+       style="background: linear-gradient(135deg, var(--p-primary-900), var(--p-primary-500))">
+    <div class="text-center">
+      <!-- <i class="pi pi-heart-fill mb-3 logo-rotate" style="font-size: 7rem; color: white; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));"></i> -->
+      <div class="text-white font-bold mt-3" style="font-size: 2.5rem;">ECCS Maskota</div>
+      <div class="text-white mt-2" style="opacity: 0.85; font-size: 1.1rem;">Sistema de Gestión de Maskotas</div>
+    </div>
+    <p-divider styleClass="border-white opacity-30" />
+    <div class="text-white text-center text-sm" style="opacity: 0.75;">
+      Acceso seguro · Gestión integral · Control total
+    </div>
+  </div>
+
+  <!-- DERECHA: Formulario -->
+  <div class="w-full lg:w-1/2 flex align-items-center justify-content-center p-6 gradient-bg" style="position: relative;">
+    <!-- Partículas animadas -->
+    <div class="particles-container">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+    <div class="w-full" style="max-width: 420px; position: relative; z-index: 1;">
+      <div class="scale-in">
+
+        <!-- Header -->
+        <div class="text-center mb-6">
+          <i class="pi pi-heart-fill lg:hidden mb-3 mx-auto logo-rotate" style="font-size: 3.5rem; color: var(--p-primary-500); display: block;"></i>
+          <div class="text-3xl font-bold mb-1">Bienvenido</div>
+          <div class="text-muted-color">Ingresa tus credenciales para continuar</div>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="formLogin" autocomplete="off">
+          <p-fluid>
+            <div class="flex flex-col gap-4">
+
+              <!-- Campo usuario -->
+              <div class="flex flex-col gap-2">
+                <label for="usuario" class="font-medium">
+                  <i class="pi pi-user mr-2"></i>Usuario
+                </label>
+                <input id="usuario" type="text" pInputText
+                  formControlName="usuario" placeholder="Ingresa tu usuario" />
+                @if(formLogin.controls['usuario'].invalid && formLogin.controls['usuario'].touched) {
+                  <p-message severity="error" text="Usuario requerido (mínimo 4 caracteres)" />
+                }
+              </div>
+
+              <!-- Campo contraseña -->
+              <div class="flex flex-col gap-2">
+                <label for="pass" class="font-medium">
+                  <i class="pi pi-lock mr-2"></i>Contraseña
+                </label>
+                <p-password id="pass" formControlName="pass"
+                  placeholder="Ingresa tu contraseña"
+                  [toggleMask]="true" [feedback]="false"
+                  styleClass="w-full" />
+                @if(formLogin.controls['pass'].invalid && formLogin.controls['pass'].touched) {
+                  <p-message severity="error" text="Contraseña requerida (mínimo 4 caracteres)" />
+                }
+              </div>
+
+              <!-- Botón -->
+              <p-button
+                label="Iniciar Sesión"
+                icon="pi pi-sign-in"
+                severity="info"
+                styleClass="w-full mt-2"
+                [disabled]="formLogin.invalid"
+                [loading]="Ariesblocked()"
+                (click)="onSave()" />
+
+            </div>
+          </p-fluid>
+        </form>
+
+        <!-- Footer -->
+        <div class="text-center mt-6 text-muted-color text-sm">
+          © 2026 ECCS Maskota — Todos los derechos reservados
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Dialog de selección de empresas -->
+<p-dialog
+  [visible]="mostrarDialogEmpresas()"
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '560px' }"
+  styleClass="empresa-dialog">
+
+  <!-- Header -->
+  <ng-template pTemplate="header">
+    <div class="empresa-dialog-header w-full">
+      <div class="empresa-dialog-header-bg">
+        <div class="flex align-items-center gap-3">
+          <div class="empresa-header-icon">
+            <i class="pi pi-building" style="font-size: 1.6rem; color: white;"></i>
+          </div>
+          <div>
+            <div class="text-white font-bold" style="font-size: 1.3rem;">Seleccionar Empresa</div>
+            <div class="text-white" style="opacity: 0.8; font-size: 0.85rem;">
+              <i class="pi pi-user mr-1"></i>Elige tu espacio de trabajo
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Body -->
+  <div class="empresa-dialog-body">
+
+    @if(empresas.length === 0) {
+      <div class="flex flex-column align-items-center gap-3 py-6">
+        <i class="pi pi-building" style="font-size: 3rem; color: var(--surface-400);"></i>
+        <span class="text-600">No hay empresas disponibles</span>
+        <small class="text-500">Contacta al administrador del sistema</small>
+      </div>
+    }
+
+    <div class="flex flex-column gap-3">
+      @for(empresa of empresas; track empresa.id) {
+        <div class="empresa-card"
+             [class.empresa-card-activa]="empresa.estatus === 'activa'"
+             [class.empresa-card-inactiva]="empresa.estatus !== 'activa'">
+
+          <div class="flex align-items-center gap-3">
+
+            <!-- Icono empresa -->
+            <div class="empresa-card-icon"
+                 [style.background]="empresa.estatus === 'activa' ? 'linear-gradient(135deg, var(--p-primary-900), var(--p-primary-500))' : 'var(--p-surface-200)'">
+              <i class="pi pi-building"
+                 [style.color]="empresa.estatus === 'activa' ? 'white' : 'var(--p-surface-500)'"
+                 style="font-size: 1.3rem;"></i>
+            </div>
+
+            <!-- Info empresa -->
+            <div class="flex-1">
+              <div class="font-bold text-base">{{ empresa.empresa }}</div>
+              <div class="flex align-items-center gap-2 mt-1">
+                <span class="empresa-badge"
+                      [class.empresa-badge-activa]="empresa.estatus === 'activa'"
+                      [class.empresa-badge-inactiva]="empresa.estatus !== 'activa'">
+                  <i [class]="empresa.estatus === 'activa' ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+                     style="font-size: 0.7rem;"></i>
+                  {{ empresa.estatus | titlecase }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Botón acceso -->
+            <p-button
+              [label]="empresa.estatus === 'activa' ? 'Ingresar' : 'Inactiva'"
+              [icon]="empresa.estatus === 'activa' ? 'pi pi-sign-in' : 'pi pi-lock'"
+              [disabled]="empresa.estatus !== 'activa'"
+              [severity]="empresa.estatus === 'activa' ? 'info' : 'secondary'"
+              [outlined]="empresa.estatus !== 'activa'"
+              size="small"
+              (click)="seleccionarEmpresa(empresa.id)" />
+
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="empresa-dialog-footer">
+      <i class="pi pi-shield mr-2" style="color: #2980b9;"></i>
+      <span class="text-600 text-sm">Solo puedes acceder a empresas con estado <strong>activo</strong></span>
+    </div>
+  </ng-template>
+
+</p-dialog>

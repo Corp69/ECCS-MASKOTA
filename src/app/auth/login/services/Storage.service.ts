@@ -23,13 +23,4 @@ export class StorageService {
       localStorage.removeItem(key);
     }
   }
-
-
-    public ClearLocalStorage(): void {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.clear();
-    }
-  }
-
-
 }
